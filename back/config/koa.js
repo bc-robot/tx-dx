@@ -9,6 +9,7 @@ let serve = require('koa-static');
 let cors = require('koa-cors');
 let bodyParser = require('koa-bodyparser');
 let xmlParser = require('koa-xml-body').default;
+let multer = require('koa-multer');
 
 
 let jwt = require('koa-jwt');
@@ -38,11 +39,17 @@ module.exports = function(app) {
     //     }
     //     yield next;
     // });
+    app.use(function *(next){
+        console.log(this.request.body);
+        yield next;
+    });
 
     // responseTime
     app.use(cors());
     app.use(xmlParser());
+    // app.use(multer());
     app.use(bodyParser());
+
     // app.use(koaBody({multipart: true}));
     app.use(responseTime());
 

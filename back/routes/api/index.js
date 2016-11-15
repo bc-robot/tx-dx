@@ -46,6 +46,8 @@ function register (app) {
             "ext": "yonghusession" //可选字段，不需要就填空。用户的session内容，腾讯server回包中会原样返回
         }
 
+        console.log(msg, 'gggggggg -- - - - --g--g-g--g-g--')
+
         var random = mu.generateNonceString;
         console.log(random, 'this is random');
 
@@ -74,27 +76,40 @@ function register (app) {
     }); // responds to "/"
 
     router.get('/smstestsend', function *(){
-        console.log('this is cb',this.request.body);
+        console.log('this is cb - - -- - -- -- -- - -get',this.request.body);
         console.log(this.path);
-        this.body = 'Home Page';
+        this.body = {
+            "result": 0, //0表示成功，非0表示失败
+            "errmsg": "" //result非0时的具体错误信息
+        };
     }); // responds to "/"
 
     router.post('/smstestsend', function *(){
-        console.log('this is cb',this.request.body);
+        console.log('this is cb - - -- - -- -- -- - -post',this.request.body, this.body);
         console.log(this.path);
-        this.body = 'Home Page11';
+
+        this.body = {
+            "result": 0, //0表示成功，非0表示失败
+            "errmsg": "" //result非0时的具体错误信息
+        };
     }); // responds to "/"
 
     router.get('/smstestcb', function *(){
-        console.log('this is cb',this.request.body);
+        console.log('this is cb - - -- - -- -- -- - -get',this.request.body);
         console.log(this.path);
-        this.body = 'Home Page';
+        this.body = {
+            "result": 0, //0表示成功，非0表示失败
+            "errmsg": "" //result非0时的具体错误信息
+        };
     }); // responds to "/"
 
     router.post('/smstestcb', function *(){
-        console.log('this is cb',this.request.body);
+        console.log('this is cb - - -- - -- -- -- - -post',this.request.body);
         console.log(this.path);
-        this.body = 'Home Page11';
+        this.body = {
+            "result": 0, //0表示成功，非0表示失败
+            "errmsg": "" //result非0时的具体错误信息
+        };
     }); // responds to "/"
 
     app.use(router.routes());
