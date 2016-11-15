@@ -20,7 +20,7 @@ function register (app) {
     router.post('/send', function *(){
         console.log(this.request.body,'this is request');
 
-
+        var that = this;
         console.log(gb_secrets);
         var jwt_secret = gb_secrets.jwt_secret;
         var strAppkey = gb_secrets.strAppkey;
@@ -28,10 +28,20 @@ function register (app) {
         console.log(jwt_secret, strAppkey, 'adfasfasdfs')
 
         //  jwt认证
-        var jwt_auth_result = yield jwt_auth(this,jwt_secret).catch(function(err) {
+        var catch_err;
+
+        var jwt_auth_result = yield jwt_auth(that,jwt_secret).catch(function(err) {
             console.log(err);
-            this.body = {err:err};
+            catch_err = err
         });
+
+        if(!jwt_auth_result) {
+            console.log('ininn')
+            return this.body = {
+                err: catch_err
+            }
+        }
+
         console.log(jwt_auth_result, 'this is jwt_auth_result');
 
         var headers = {
