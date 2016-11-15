@@ -94,6 +94,16 @@ function register (app) {
 
 
     router.get('/smsoutcb', function *(){
+        console.log('this is cb - - -- - -- -- -- - -get',this.request.body, this.body);
+        console.log(this.path);
+
+        this.body = {
+            "result": 0, //0表示成功，非0表示失败
+            "errmsg": "" //result非0时的具体错误信息
+        };
+    });
+
+    router.post('/smsoutcb', function *(){
         console.log('this is cb - - -- - -- -- -- - -post',this.request.body, this.body);
         console.log(this.path);
 
@@ -103,7 +113,18 @@ function register (app) {
         };
     });
 
+
     router.get('/smsincb', function *(){
+        console.log('this is cb - - -- - -- -- -- - -get',this.request.body, this.body);
+        console.log(this.path);
+
+        this.body = {
+            "result": 0, //0表示成功，非0表示失败
+            "errmsg": "" //result非0时的具体错误信息
+        };
+    });
+
+    router.post('/smsincb', function *(){
         console.log('this is cb - - -- - -- -- -- - -post',this.request.body, this.body);
         console.log(this.path);
 
