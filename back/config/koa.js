@@ -39,10 +39,11 @@ module.exports = function(app) {
     //     }
     //     yield next;
     // });
-    app.use(function *(next){
-        console.log(this.request.body);
-        yield next;
-    });
+
+    // app.use(function *(){
+    //     console.log()
+    // })
+
 
     // responseTime
     app.use(cors());
@@ -51,12 +52,12 @@ module.exports = function(app) {
     app.use(bodyParser());
 
     // app.use(koaBody({multipart: true}));
-    app.use(responseTime());
+    // app.use(responseTime());
 
     // app.use(compress());
     // app.keys = ['session'];
     // app.use(session(app));
-    onerror(app);
+    // onerror(app);
 
     app.use(serve(path.join(__dirname,'../../dist')));
 }
