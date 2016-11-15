@@ -90,6 +90,28 @@ function register (app) {
         this.set('content-type', 'application/json');
         this.body = body;
     });
+
+
+
+    router.get('/smsoutcb', function *(){
+        console.log('this is cb - - -- - -- -- -- - -post',this.request.body, this.body);
+        console.log(this.path);
+
+        this.body = {
+            "result": 0, //0表示成功，非0表示失败
+            "errmsg": "" //result非0时的具体错误信息
+        };
+    });
+
+    router.get('/smsincb', function *(){
+        console.log('this is cb - - -- - -- -- -- - -post',this.request.body, this.body);
+        console.log(this.path);
+
+        this.body = {
+            "result": 0, //0表示成功，非0表示失败
+            "errmsg": "" //result非0时的具体错误信息
+        };
+    });
     app.use(router.routes());
     app.use(router.allowedMethods());
 }
