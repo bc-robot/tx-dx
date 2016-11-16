@@ -26,7 +26,8 @@
     "lodash": "^4.16.6",
     "mini-logger": "^1.1.1",
     "moment": "^2.16.0",
-    "request": "^2.78.0"
+    "request": "^2.78.0",
+    "svg-captcha": "^1.0.7"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"

@@ -8,7 +8,11 @@ var crypto = require('crypto');
 var mu = require('../lib/myUtil');
 var md5 = require('MD5');
 var request = require('co-request');
+var svgCaptcha = require('svg-captcha');
 var gb_secrets = require('../../../../gb-secrets/gb-dx');
+
+var jwt_secret = gb_secrets.jwt_secret;
+var strAppkey = gb_secrets.strAppkey;
 
 function register (app) {
     var router = new Router({
@@ -22,8 +26,7 @@ function register (app) {
         console.log(this.request.body, 'this is request');
 
         console.log(gb_secrets);
-        var jwt_secret = gb_secrets.jwt_secret;
-        var strAppkey = gb_secrets.strAppkey;
+
 
         console.log(jwt_secret, strAppkey, 'adfasfasdfs')
 
@@ -90,6 +93,45 @@ function register (app) {
         this.set('content-type', 'application/json');
         this.body = body;
     });
+
+
+    router.post('/captcha', function *(){
+        console.log(this.request.body, 'this is request');
+        var catch_err;
+        var jwt_auth_result = yield jwt_auth(this,jwt_secret).catch(function(err) {
+            console.log(err);
+            catch_err = err
+        });
+
+        if(!jwt_auth_result) {
+            return this.body = {
+                err: catch_err
+            }
+        }
+
+        var opts = {}
+
+        if(jwt_auth_result.size ) {
+            opts.size = jwt_auth_result.size
+        }
+        if(jwt_auth_result.ignoreChars) {
+            opts.ignoreChars = jwt_auth_result.ignoreChars
+        }
+
+        var text = svgCaptcha.randomText(opts);
+
+        var captcha = svgCaptcha(text);
+        console.log(text,captcha);
+
+        this.body = {
+            text: text,
+            captcha: captcha
+        };
+    });
+
+
+
+
 
 
 
