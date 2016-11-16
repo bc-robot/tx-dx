@@ -1,0 +1,19 @@
+{
+    "nam": "tx-dx",
+    "version": "0.0.1",
+    "description": "apiDoc example",
+    "title": "Custom apiDoc",
+    "url" : "https://api.github.com/v1",
+    "header": {
+        "title": "My own header title",
+        "filename": "header.md"
+    },
+    "footer": {
+        "title": "My own footer title",
+        "filename": "footer.md"
+    },
+    "template": {
+        "withCompare": true,
+        "withGenerator": true
+    }
+}
