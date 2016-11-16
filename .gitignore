@@ -12,7 +12,7 @@ npm-debug.log*
 ###########
 .DS_Store
 node_modules
-dist
+#dist
 pids
 log
 logs
