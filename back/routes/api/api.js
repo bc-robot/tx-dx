@@ -14,11 +14,11 @@ var gb_secrets = require('../../../../gb-secrets/gb-dx');
 // var jwt_secret = gb_secrets.jwt_secret;
 var strAppkey = gb_secrets.strAppkey;
 
-function register (app) {
+function register(app) {
     var router = new Router({
         prefix: '/api'
     });
-    router.get('/send/test', function *(){
+    router.get('/send/test', function *() {
         this.body = RES.SUCCESS('getout of here');
     });
 
@@ -45,11 +45,47 @@ function register (app) {
      *     "exp": "1000000000000"  // Data.now() + 1000
      *   }
      *
-     * @apiSuccess {String} firstname Firstname of the User.
-     * @apiSuccess {String} lastname  Lastname of the User.
+     *
+     *
+     * @apiParamExample {json} Success-Example
+     *
+     *   {
+     *     status: { code: 0, httpcode: 200 },
+     *     data:
+     *       { result: '0',
+     *         errmsg: 'OK',
+     *         ext: '',
+     *         sid: '8:Se9tJwqtwU9TjwIpq6T20161117',
+     *         count: 1,
+     *         fee: 2
+     *       },
+     *     msg: ''
+     *   }
+     *
+     * @apiSuccess {String} status 成功状态
+     * @apiSuccess {Json} data  服务器返回数据(result:0 发送成功).
+     * @apiSuccess {String} msg  空(保留字段)
+     *
+     *
+     *
+     * @apiParamExample {json} Error-Example
+     * {
+     *   status:
+     *   { code: -1, httpcode: 500 },
+     *   data:
+     *   {
+     *       name: 'JsonWebTokenError',
+     *       message: 'invalid signature'
+     *   },
+     *   msg: '验证出错'
+     *  }
+     *
+     * @apiError {String} status 失败状态
+     * @apiError {Json} data name(出错类型),message(出错信息)
+     * @apiError {String} msg 服务器批注
      *
      */
-    router.post('/send', function *(){
+    router.post('/send', function *() {
         console.log(this.request.body, 'this is request');
         console.log(gb_secrets);
         var jwt_auth_result = this.jwt_auth_result;
@@ -61,7 +97,7 @@ function register (app) {
         var strPhone = jwt_auth_result.tel;
 
         // var sig = crypto.createHash('md5').update((strAppkey+strPhone).toString()).digest('hex');
-        var appPhone = strAppkey+strPhone;
+        var appPhone = strAppkey + strPhone;
         var sig = md5(appPhone);
 
         console.log(sig, 'this is sig');
@@ -79,7 +115,7 @@ function register (app) {
             "sig": sig, //app凭证，具体计算方式见下注
             "extend": "", //可选字段，默认没有开通(需要填空)。通道扩展码，
             //在短信回复场景中，腾讯server会原样返回，开发者可依此区分是哪种类型的回复
-            "ext": jwt_auth_result.ext?jwt_auth_result.ext:"" //可选字段，不需要就填空。用户的session内容，腾讯server回包中会原样返回
+            "ext": jwt_auth_result.ext ? jwt_auth_result.ext : "" //可选字段，不需要就填空。用户的session内容，腾讯server回包中会原样返回
         }
         console.log(msg, 'this is msmsmsmsmsmsmssmmsmsmsmsmsmsmg')
 
@@ -88,7 +124,7 @@ function register (app) {
         console.log(random, 'this is random');
 
         var options = {
-            url: 'https://yun.tim.qq.com/v3/tlssmssvr/sendsms?sdkappid=1400018008&random='+random,
+            url: 'https://yun.tim.qq.com/v3/tlssmssvr/sendsms?sdkappid=1400018008&random=' + random,
             method: 'POST',
             headers: headers,
             json: msg
@@ -113,21 +149,34 @@ function register (app) {
      * @apiParam {Number} size  验证码位数(NULL)
      * @apiParam {String} ignoreChars  不包含的字符(NULL)
      *
-     * @apiSuccess {Json} data { "text":"验证码", "captcha": "svg格式字符串"}
-     * @apiSuccess {Json} status { "code":"0", "httpcode": "NULL"}
      *
-     * @apiError {Json} data { "error": "errmsg"}
-     * @apiError {Json} status { "code": "-1"}
+     * @apiParamExample {json} Success-Example
+     *
+     *   {
+     *     status: { code: 0, httpcode: 200 },
+     *     data:
+     *     {
+     *       text: 'HjJu',
+     *       captcha: 'svg'
+     *     },
+     *     msg: ''
+     *   }
+     *
+     *
+     * @apiSuccess {Json} data "text":"验证码", "captcha": "svg格式字符串"
+     *
+     *
+     * @apiError {Json} status  "code": "-1"
      */
-    router.post('/captcha', function *(){
+    router.post('/captcha', function *() {
         var jwt_auth_result = this.jwt_auth_result;
 
         var opts = {};
 
-        if(jwt_auth_result.size ) {
+        if (jwt_auth_result.size) {
             opts.size = jwt_auth_result.size
         }
-        if(jwt_auth_result.ignoreChars) {
+        if (jwt_auth_result.ignoreChars) {
             opts.ignoreChars = jwt_auth_result.ignoreChars
         }
 
@@ -143,13 +192,8 @@ function register (app) {
     });
 
 
-
-
-
-
-
-    router.get('/smsoutcb', function *(){
-        console.log('this is cb - - -- - -- -- -- - -get',this.request.body, this.body);
+    router.get('/smsoutcb', function *() {
+        console.log('this is cb - - -- - -- -- -- - -get', this.request.body, this.body);
         console.log(this.path);
 
         this.body = {
@@ -158,8 +202,8 @@ function register (app) {
         };
     });
 
-    router.post('/smsoutcb', function *(){
-        console.log('this is cb - - -- - -- -- -- - -post',this.request.body, this.body);
+    router.post('/smsoutcb', function *() {
+        console.log('this is cb - - -- - -- -- -- - -post', this.request.body, this.body);
         console.log(this.path);
 
         this.body = {
@@ -169,8 +213,8 @@ function register (app) {
     });
 
 
-    router.get('/smsincb', function *(){
-        console.log('this is cb - - -- - -- -- -- - -get',this.request.body, this.body);
+    router.get('/smsincb', function *() {
+        console.log('this is cb - - -- - -- -- -- - -get', this.request.body, this.body);
         console.log(this.path);
 
         this.body = {
@@ -179,8 +223,8 @@ function register (app) {
         };
     });
 
-    router.post('/smsincb', function *(){
-        console.log('this is cb - - -- - -- -- -- - -post',this.request.body, this.body);
+    router.post('/smsincb', function *() {
+        console.log('this is cb - - -- - -- -- -- - -post', this.request.body, this.body);
         console.log(this.path);
 
         this.body = {
