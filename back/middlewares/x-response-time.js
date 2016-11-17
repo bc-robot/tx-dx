@@ -13,7 +13,7 @@ module.exports = responseTime;
 function responseTime() {
     return function *responseTime(next){
         var start = Date.now();
-        yield* next;
+        yield *next;
         var delta = Math.ceil(Date.now() - start);
         this.set('X-Response-Time', delta + 'ms');
     }

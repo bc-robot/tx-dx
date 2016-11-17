@@ -3,6 +3,7 @@
  */
 const conf = require('./logger/conf');
 let path = require('path');
+let RES = require('../util/RES');
 //日志记录
 const logger = require('mini-logger');
 //moment时间
@@ -16,10 +17,12 @@ global.path = path;
 // console.log('global-path');
 global.moment = moment;
 global._ = _;
+global.RES = RES;
 
 module.exports = {
     log: log,
     path: path,
     moment: moment,
-    _: _
+    _: _,
+    RES: RES
 }

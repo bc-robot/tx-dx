@@ -11,47 +11,54 @@ var request = require('co-request');
 var svgCaptcha = require('svg-captcha');
 var gb_secrets = require('../../../../gb-secrets/gb-dx');
 
-var jwt_secret = gb_secrets.jwt_secret;
+// var jwt_secret = gb_secrets.jwt_secret;
 var strAppkey = gb_secrets.strAppkey;
 
 function register (app) {
     var router = new Router({
         prefix: '/api'
     });
-    router.get('/send', function *(){
-
-        this.body = 'getout of here';
+    router.get('/send/test', function *(){
+        this.body = RES.SUCCESS('getout of here');
     });
+
+    /**
+     * @api {post} /api/send 发送短信
+     * @apiVersion 0.0.1
+     * @apiName APIsend
+     * @apiGroup API
+     * @apiPermission none
+     *
+     * @apiDescription 短信发送描述.
+     *
+     * @apiParam {String} tel  phone NO.
+     * @apiParam {Number} tpl_id  template ID.
+     * @apiParam {Array} params  template content array.
+     * @apiParam {String} exp  13位过期时间.
+     *
+     * @apiParamExample {json} Request-Example:
+     *   {
+     *     "tel": 11011912020,
+     *     "tpl_id": 110,
+     *     "params": ["验证码", "1234", "4"],
+     *     "ext": "可选字段"  //可选字段，不需要就填空。用户的session内容，腾讯server回包中会原样返回
+     *     "exp": "1000000000000"  // Data.now() + 1000
+     *   }
+     *
+     * @apiSuccess {String} firstname Firstname of the User.
+     * @apiSuccess {String} lastname  Lastname of the User.
+     *
+     */
     router.post('/send', function *(){
         console.log(this.request.body, 'this is request');
-
         console.log(gb_secrets);
-
-
-        console.log(jwt_secret, strAppkey, 'adfasfasdfs')
-
-        //  jwt认证
-        var catch_err;
-
-        var jwt_auth_result = yield jwt_auth(this,jwt_secret).catch(function(err) {
-            console.log(err);
-            catch_err = err
-        });
-
-        if(!jwt_auth_result) {
-            console.log('ininn')
-            return this.body = {
-                err: catch_err
-            }
-        }
-
-        console.log(jwt_auth_result, 'this is jwt_auth_result');
+        var jwt_auth_result = this.jwt_auth_result;
+        console.log(this.jwt_auth_result, 'this is jwt access token!!');
 
         var headers = {
             'Content-Type': 'application/json'
         };
         var strPhone = jwt_auth_result.tel;
-
 
         // var sig = crypto.createHash('md5').update((strAppkey+strPhone).toString()).digest('hex');
         var appPhone = strAppkey+strPhone;
@@ -72,7 +79,7 @@ function register (app) {
             "sig": sig, //app凭证，具体计算方式见下注
             "extend": "", //可选字段，默认没有开通(需要填空)。通道扩展码，
             //在短信回复场景中，腾讯server会原样返回，开发者可依此区分是哪种类型的回复
-            "ext": "yonghusession" //可选字段，不需要就填空。用户的session内容，腾讯server回包中会原样返回
+            "ext": jwt_auth_result.ext?jwt_auth_result.ext:"" //可选字段，不需要就填空。用户的session内容，腾讯server回包中会原样返回
         }
         console.log(msg, 'this is msmsmsmsmsmsmssmmsmsmsmsmsmsmg')
 
@@ -91,25 +98,31 @@ function register (app) {
         let body = result.body;
         console.log('Body: ', body);
         this.set('content-type', 'application/json');
-        this.body = body;
+        this.body = RES.SUCCESS(body);
     });
 
 
+    /**
+     * @api {post} /api/captcha 生成验证码
+     * @apiVersion 0.0.1
+     * @apiName APIcaptcha
+     * @apiGroup API
+     *
+     * @apiDescription 注意可以不传参数,但是必须用jwt传输
+     *
+     * @apiParam {Number} size  验证码位数(NULL)
+     * @apiParam {String} ignoreChars  不包含的字符(NULL)
+     *
+     * @apiSuccess {Json} data { "text":"验证码", "captcha": "svg格式字符串"}
+     * @apiSuccess {Json} status { "code":"0", "httpcode": "NULL"}
+     *
+     * @apiError {Json} data { "error": "errmsg"}
+     * @apiError {Json} status { "code": "-1"}
+     */
     router.post('/captcha', function *(){
-        console.log(this.request.body, 'this is request');
-        var catch_err;
-        var jwt_auth_result = yield jwt_auth(this,jwt_secret).catch(function(err) {
-            console.log(err);
-            catch_err = err
-        });
+        var jwt_auth_result = this.jwt_auth_result;
 
-        if(!jwt_auth_result) {
-            return this.body = {
-                err: catch_err
-            }
-        }
-
-        var opts = {}
+        var opts = {};
 
         if(jwt_auth_result.size ) {
             opts.size = jwt_auth_result.size
@@ -121,12 +134,12 @@ function register (app) {
         var text = svgCaptcha.randomText(opts);
 
         var captcha = svgCaptcha(text);
-        console.log(text,captcha);
+        // console.log(text,captcha);
 
-        this.body = {
+        return this.body = RES.SUCCESS({
             text: text,
             captcha: captcha
-        };
+        });
     });
 
 

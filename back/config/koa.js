@@ -14,6 +14,9 @@ let multer = require('koa-multer');
 
 let jwt = require('koa-jwt');
 
+var jwt_auth_mid = require('../middlewares/jwt-auth-mid');
+var page_not_found = require('../middlewares/404');
+// var jwt_auth = require('../routes/lib/jwt_auth');
 // //视图模版
 // let views = require('co-views');
 // //session
@@ -44,20 +47,23 @@ module.exports = function(app) {
     //     console.log()
     // })
 
-
+    // app.use(multer());
     // responseTime
+    app.use(responseTime());
+    app.use(serve(path.join(__dirname,'../../dist')));
+
+
+
     app.use(cors());
     app.use(xmlParser());
-    // app.use(multer());
     app.use(bodyParser());
 
-    // app.use(koaBody({multipart: true}));
-    // app.use(responseTime());
+    // app.use(page_not_found());
+    // jwt验证
+    app.use(jwt_auth_mid());
 
     // app.use(compress());
     // app.keys = ['session'];
     // app.use(session(app));
     // onerror(app);
-
-    app.use(serve(path.join(__dirname,'../../dist')));
 }

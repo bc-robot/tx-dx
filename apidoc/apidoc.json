@@ -1,0 +1,19 @@
+{
+    "name": "GB-SMS",
+    "version": "0.0.1",
+    "description": "This is sms api doc",
+    "title": "GB SMS",
+    "url" : "https://sms.xmgc360.com",
+    "header": {
+        "title": "SMS DOC",
+        "filename": "apidoc/header.md"
+    },
+    "footer": {
+        "title": "IN THE END",
+        "filename": "apidoc/footer.md"
+    },
+    "template": {
+        "withCompare": true,
+        "withGenerator": true
+    }
+}
