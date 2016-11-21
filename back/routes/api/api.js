@@ -12,7 +12,8 @@ var svgCaptcha = require('svg-captcha');
 var gb_secrets = require('../../../../gb-secrets/gb-dx');
 
 // var jwt_secret = gb_secrets.jwt_secret;
-var strAppkey = gb_secrets.strAppkey;
+var str_appkey = gb_secrets.str_appkey;
+var sdk_appid = gb_secrets.sdk_appid;
 
 function register(app) {
     var router = new Router({
@@ -30,6 +31,9 @@ function register(app) {
      * @apiPermission none
      *
      * @apiDescription 短信发送描述.
+     * @apiDescription ID：4242    通知客服有老师提出认证用户{1}联系电话{2}，希望认证成为{3}院校的教师，请您尽快登录网站后台进行审核。
+     * @apiDescription ID：4240    成功认证为老师您希望认证为{1}教师的申请已经通过，接下来您可以随时登录我们的网站，快速发布课程设计、毕业设计或实验作业了！
+     * @apiDescription ID：4230    用户注册验证码您的验证码是{1}，有效时间{2}分钟，请不要告诉他人，如非本人操作请忽略此短信。
      *
      * @apiParam {String} tel  phone NO.
      * @apiParam {Number} tpl_id  template ID.
@@ -97,10 +101,10 @@ function register(app) {
         var strPhone = jwt_auth_result.tel;
 
         // var sig = crypto.createHash('md5').update((strAppkey+strPhone).toString()).digest('hex');
-        var appPhone = strAppkey + strPhone;
+        var appPhone = str_appkey + strPhone;
         var sig = md5(appPhone);
 
-        console.log(sig, 'this is sig');
+        console.log(sig, 'this is sig','-- - - - - -- -> strAppkey', str_appkey);
 
         var msg = {
             "tel": {
@@ -121,10 +125,10 @@ function register(app) {
 
         var random = mu.generateNonceString();
 
-        console.log(random, 'this is random');
+        console.log(random, 'this is random', " >>>>>>>>>>>", sdk_appid);
 
         var options = {
-            url: 'https://yun.tim.qq.com/v3/tlssmssvr/sendsms?sdkappid=1400018008&random=' + random,
+            url: 'https://yun.tim.qq.com/v3/tlssmssvr/sendsms?sdkappid='+sdk_appid+'&random=' + random,
             method: 'POST',
             headers: headers,
             json: msg
