@@ -15,11 +15,6 @@ function register (app) {
         this.body = 'Home Page';
     }); // responds to "/"
     
-
-
-
-
-
     router.post('/', function *(){
         console.log('this is cb',this.request.body);
         console.log(this.path);

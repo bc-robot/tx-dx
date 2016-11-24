@@ -49,12 +49,17 @@ module.exports = function(app) {
 
     // app.use(multer());
     // responseTime
+
     app.use(responseTime());
     app.use(serve(path.join(__dirname,'../../dist')));
 
 
 
-    app.use(cors());
+    app.use(cors(
+        {
+            credentials: true
+        }
+        ));
     app.use(xmlParser());
     app.use(bodyParser());
 

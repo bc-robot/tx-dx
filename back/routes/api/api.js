@@ -23,6 +23,10 @@ function register(app) {
         this.body = RES.SUCCESS('getout of here');
     });
 
+    router.post('/send/tttt', function *() {
+        this.body = RES.SUCCESS('getout of here');
+    });
+
     /**
      * @api {post} /api/send 发送短信
      * @apiVersion 0.0.1
@@ -30,12 +34,12 @@ function register(app) {
      * @apiGroup API
      * @apiPermission none
      *
-     * @apiDescription 短信发送描述.
-     * @apiDescription ID：4242    通知客服有老师提出认证用户{1}联系电话{2}，希望认证成为{3}院校的教师，请您尽快登录网站后台进行审核。
-     * @apiDescription ID：4240    成功认证为老师您希望认证为{1}教师的申请已经通过，接下来您可以随时登录我们的网站，快速发布课程设计、毕业设计或实验作业了！
-     * @apiDescription ID：4230    用户注册验证码您的验证码是{1}，有效时间{2}分钟，请不要告诉他人，如非本人操作请忽略此短信。
-     * @apiDescription ID：5038    成功认证为企业您希望认证为{1}企业的申请已经通过，接下来您可以随时登录我们的网站，轻松招聘或发布实习任务考验人才，数百院校高材生任你挑选，任何需求的产品免费为您开发！
-     * @apiDescription ID：5032    通知客服有企业提出认证用户{1}联系电话{2}，希望认证成为{3}企业用户，请您尽快登录网站后台进行审核。
+     * @apiDescription 短信发送描述. <br>
+     *  ID：4242    通知客服有老师提出认证用户{1}联系电话{2}，希望认证成为{3}院校的教师，请您尽快登录网站后台进行审核。<br>
+     *  ID：4240    成功认证为老师您希望认证为{1}教师的申请已经通过，接下来您可以随时登录我们的网站，快速发布课程设计、毕业设计或实验作业了！<br>
+     *  ID：4230    用户注册验证码您的验证码是{1}，有效时间{2}分钟，请不要告诉他人，如非本人操作请忽略此短信。<br>
+     *  ID：5038    成功认证为企业您希望认证为{1}企业的申请已经通过，接下来您可以随时登录我们的网站，轻松招聘或发布实习任务考验人才，数百院校高材生任你挑选，任何需求的产品免费为您开发！<br>
+     *  ID：5032    通知客服有企业提出认证用户{1}联系电话{2}，希望认证成为{3}企业用户，请您尽快登录网站后台进行审核。<br>
      *
      * @apiParam {String} tel  phone NO.
      * @apiParam {Number} tpl_id  template ID.
